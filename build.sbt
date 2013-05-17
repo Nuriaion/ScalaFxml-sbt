@@ -1,17 +1,17 @@
-scalaVersion := "2.10.1"
+scalaVersion := "2.9.2"
 
 sbtPlugin := true
 
-name := "ScalaFxml-sbt"
+name := "scalafxml-sbt"
 
 organization := "com.github.nuriaion"
 
-scalacOptions ++= Seq(
-    "-feature",
-    "-deprecation"
-)
+//scalacOptions ++= Seq(
+//    "-feature",
+//    "-deprecation"
+//)
 
-version :="0.1-SNAPSHOT"
+version :="0.1.0-SNAPSHOT"
 
 parallelExecution := true
 
@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "1.14" % "test",
+    "org.specs2" %% "specs2" % "1.12.3" % "test",
     "org.scalatest" %% "scalatest" % "1.9.1" % "test",
     "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
     "junit" % "junit" % "4.11" % "test",
@@ -35,9 +35,25 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "com.github.nuriaion" %% "scalafxml" % "0.1-SNAPSHOT"
+    "com.github.nuriaion" %% "scalafxml" % "0.1.0-SNAPSHOT"
 )
 
 testOptions in Test += Tests.Argument("junitxml", "html", "console", "markup")
 
-publishArtifact in Compile := true
+publishMavenStyle := true
+
+publishTo <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { _ => false }
+
+licenses := Seq("BSD-style" -> url("http://www.opensource.org/licenses/bsd-license.php"))
+
+homepage := Some(url("https://github.com/Nuriaion/ScalaFxml-sbt"))

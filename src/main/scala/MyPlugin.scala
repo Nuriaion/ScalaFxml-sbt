@@ -1,5 +1,7 @@
 import sbt._
-object MyPlugin extends Plugin
+import Keys._
+
+object ScalaFxmlPlugin extends Plugin
 {
     // configuration points, like the built in `version`, `libraryDependencies`, or `compile`
     // by implementing Plugin, these are automatically imported in a user's `build.sbt`
@@ -15,4 +17,14 @@ object MyPlugin extends Plugin
 
     // alternatively, by overriding `settings`, they could be automatically added to a Project
     // override val settings = Seq(...)
+
+    override lazy val settings = Seq(commands += myCommand)
+
+    lazy val myCommand =
+    Command.command("hello") { (state: State) =>
+      println("Hi!")
+      newSetting map { str => println(str) }
+      state
+    }
+
 }
