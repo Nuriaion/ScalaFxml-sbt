@@ -161,7 +161,7 @@ object ScalaFxmlPlugin extends sbt.Plugin {
       println("generate2")
       val bindingResults:Seq[File] = for (file <- files) yield {
         val file2:File = managed(Source fromFile file) { fxmlFile =>
-          val outputFile = dir / "scala" / (/*file.getName + */"222" + ".scala")
+          val outputFile = dir / "scala" / (file.getName + ".scala")
           outputFile.delete
           outputFile.getParentFile.mkdirs
           println("Save to " + outputFile)
@@ -169,7 +169,7 @@ object ScalaFxmlPlugin extends sbt.Plugin {
           managed(new PrintWriter(outputFile, "utf-8")) { f =>
             val pars = parse(fxmlFile.mkString)
             val sim = xmlToElement(pars)
-            f.write(elementToString("Schubiud", sim))
+            f.write(elementToString(file.getName.split('.').head.capitalize, sim))
           }
           outputFile
         }
