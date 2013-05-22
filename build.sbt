@@ -18,7 +18,9 @@ parallelExecution := true
 resolvers ++= Seq(
     "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases",
     "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
-    "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
+    "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases",
+    "Nuriaion Snapshots" at "http://nuriaion.github.io/maven-repo/maven-repo/snapshots",
+    "Nuriaion Releases" at "http://nuriaion.github.io/maven-repo/maven-repo/releases"
 )
 
 libraryDependencies ++= Seq(
@@ -42,13 +44,7 @@ testOptions in Test += Tests.Argument("junitxml", "html", "console", "markup")
 
 publishMavenStyle := true
 
-publishTo <<= version { (v: String) =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := Some(Resolver.file("file", new File("../maven-repo/snapshots")))
 
 publishArtifact in Test := false
 
