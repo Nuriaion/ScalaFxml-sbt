@@ -84,30 +84,22 @@ object ScalaFxmlPlugin extends sbt.Plugin {
     },
     sourceManaged in scalafxml <<= sourceManaged / "sbt-scalaxb",
     sourceGenerators in Compile <+= (sourceManaged in Compile, resourceDirectories in Compile, fxmlFiles, streams) map { (dir, res, files, s) =>
-      val file = dir / "demo" / "Test.scala"
-      IO.write(file, """object Test extends App { println("Hi") }""")
-
-      println("generate2")
       val bindingResults:Seq[File] = for (file <- files) yield {
         val file2:File = managed(Source fromFile file) { fxmlFile =>
           val outputFile = dir / "scala" / (file.getName + ".scala")
           outputFile.delete
           outputFile.getParentFile.mkdirs
           println("Save to " + outputFile)
-          s.log.debug("Save to " + outputFile)
           managed(new PrintWriter(outputFile, "utf-8")) { f =>
-            val pars = parse(fxmlFile.mkString)
+            val fxmlSource = fxmlFile.mkString
+            val pars = parse(fxmlSource)
             val sim = xmlToElement(pars)
-            f.write(generateScalaSource("FxmlFiles", file.getName.split('.').head.capitalize, imports, sim))
+            f.write(generateScalaSource("FxmlFiles", file.getName.split('.').head.capitalize, parseImports(fxmlSource), sim))
           }
           outputFile
         }
         file2
       }
-      println("Res: " + bindingResults.toSeq)
-      bindingResults.toSeq
-
-      Seq(file)
       bindingResults.toSeq
     },
     clean in scalafxml <<= (sourceManaged in scalafxml) map { (outDir) =>
