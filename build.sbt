@@ -11,7 +11,7 @@ organization := "com.github.nuriaion"
 //    "-deprecation"
 //)
 
-version :="0.1.0-SNAPSHOT"
+version :="0.1.1-SNAPSHOT"
 
 parallelExecution := true
 
@@ -37,7 +37,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "com.github.nuriaion" %% "scalafxml" % "0.1.0-SNAPSHOT"
+    "com.github.nuriaion" %% "scalafxml" % "0.1.1-SNAPSHOT"
 )
 
 testOptions in Test += Tests.Argument("junitxml", "html", "console", "markup")
