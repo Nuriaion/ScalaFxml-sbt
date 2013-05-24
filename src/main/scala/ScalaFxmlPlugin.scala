@@ -86,7 +86,7 @@ object ScalaFxmlPlugin extends sbt.Plugin {
     sourceGenerators in Compile <+= (sourceManaged in Compile, resourceDirectories in Compile, fxmlFiles, streams) map { (dir, res, files, s) =>
       val bindingResults:Seq[File] = for (file <- files) yield {
         val file2:File = managed(Source fromFile file) { fxmlFile =>
-          val outputFile = dir / "scala" / (file.getName + ".scala")
+          val outputFile = dir / "scalafxml" / (file.getName + ".scala")
           outputFile.delete
           outputFile.getParentFile.mkdirs
           println("Save to " + outputFile)
